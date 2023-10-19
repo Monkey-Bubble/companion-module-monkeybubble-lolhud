@@ -9,6 +9,8 @@ class ModuleInstance extends InstanceBase {
 		super(internal)
 	}
 
+	wsRegex = '^wss?:\\/\\/([\\da-z\\.-]+)(:\\d{1,5})?(?:\\/(.*))?$'
+
 	async init(config) {
 		this.config = config
 
@@ -32,17 +34,51 @@ class ModuleInstance extends InstanceBase {
 		return [
 			{
 				type: 'textinput',
-				id: 'host',
-				label: 'Target IP',
+				id: 'url',
+				label: 'Target URL',
+				tooltip: 'The URL of the WebSocket server (ws[s]://domain[:port][/path])',
 				width: 8,
-				regex: Regex.IP,
+				regex: '/' + this.wsRegex + '/',
 			},
 			{
-				type: 'textinput',
-				id: 'port',
-				label: 'Target Port',
+				type: 'number',
+				id: 'stream',
+				label: 'Stream #',
 				width: 4,
-				regex: Regex.PORT,
+				default: 1,
+				min: 1,
+				max: 100,
+			},
+			{
+				type: 'checkbox',
+				id: 'reconnect',
+				label: 'Reconnect',
+				tooltip: 'Reconnect on WebSocket error (after 5 secs)',
+				width: 6,
+				default: true,
+			},
+			{
+				type: 'checkbox',
+				id: 'append_new_line',
+				label: 'Append new line',
+				tooltip: 'Append new line (\\r\\n) to commands',
+				width: 6,
+				default: true,
+			},
+			{
+				type: 'checkbox',
+				id: 'debug_messages',
+				label: 'Debug messages',
+				tooltip: 'Log incomming and outcomming messages',
+				width: 6,
+			},
+			{
+				type: 'checkbox',
+				id: 'reset_variables',
+				label: 'Reset variables',
+				tooltip: 'Reset variables on init and on connect',
+				width: 6,
+				default: true,
 			},
 		]
 	}
