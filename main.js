@@ -1,4 +1,5 @@
 const { InstanceBase, Regex, runEntrypoint, InstanceStatus } = require('@companion-module/base')
+const WebSocket = require('ws')
 const UpgradeScripts = require('./upgrades')
 const UpdateActions = require('./actions')
 const UpdateFeedbacks = require('./feedbacks')
@@ -8,12 +9,14 @@ class ModuleInstance extends InstanceBase {
 	constructor(internal) {
 		super(internal)
 	}
+	isInitialized = false
 
 	wsRegex = '^wss?:\\/\\/([\\da-z\\.-]+)(:\\d{1,5})?(?:\\/(.*))?$'
 
 	async init(config) {
 		this.config = config
 
+		this.initWebSocket()
 		this.updateStatus(InstanceStatus.Ok)
 
 		this.updateActions() // export actions
@@ -27,6 +30,66 @@ class ModuleInstance extends InstanceBase {
 
 	async configUpdated(config) {
 		this.config = config
+	}
+
+	reconnect() {
+		this.initWebSocket()
+	}
+
+	initWebSocket() {
+		const url = `${this.config.url}/${this.config.stream}?topic=feedback,command,${this.config.topic.join(',')}`
+		if (!url || url.match(new RegExp(this.wsRegex)) === null) {
+			this.updateStatus(InstanceStatus.BadConfig, `WS URL is not defined or invalid`)
+			return
+		}
+
+		this.updateStatus(InstanceStatus.Connecting)
+
+		// close existing connection if any
+		if (this.ws) {
+			this.ws.close(1000)
+			delete this.ws
+		}
+		this.ws = new WebSocket(url)
+
+		this.ws.on('open', () => {
+			this.updateStatus(InstanceStatus.Ok)
+			this.log('debug', `Connection opened`)
+			this.ws.send(JSON.stringify({ topic: 'command', payload: { feedback: Date.now() } }))
+		})
+		this.ws.on('close', (code) => {
+			this.log('debug', `Connection closed with code ${code}`)
+			this.updateStatus(InstanceStatus.Disconnected, `Connection closed with code ${code}`)
+			setTimeout(this.reconnect(), 5000)
+			this.log('debug', `Attempt reconnect in 500ms`)
+			this.updateStatus(InstanceStatus.Disconnected, `Attempt reconnect in 500ms`)
+		})
+
+		this.ws.on('message', this.messageReceivedFromWebSocket.bind(this))
+
+		this.ws.on('error', (data) => {
+			this.log('error', `WebSocket error: ${data}`)
+		})
+	}
+
+	messageReceivedFromWebSocket(data) {
+		if (this.config.debug_messages) {
+			this.log('debug', `Message received: ${data}`)
+		}
+
+		let msgValue = null
+		try {
+			msgValue = JSON.parse(data)
+		} catch (e) {
+			msgValue = data
+		}
+
+		if (msgValue.topic && msgValue.topic === 'feedback') {
+			if (msgValue.observer !== 'obs1')
+				this.setVariableValue({ ['tab_' + msgValue.observer]: msgValue.payload['tab_' + msgValue.observer] })
+			else this.setVariableValues(msgValue.payload)
+			this.checkFeedbacks()
+		}
 	}
 
 	// Return config fields for web config
@@ -52,8 +115,8 @@ class ModuleInstance extends InstanceBase {
 			{
 				id: 'topic',
 				type: 'multidropdown',
-				label: 'Select Topics',
-				tooltip: 'Select topics to subscribe to',
+				label: 'Topics',
+				tooltip: 'Topics to subscribe to',
 				width: 3,
 				choices: [
 					{ id: 'obs1', label: 'Observer 1' },
@@ -62,34 +125,10 @@ class ModuleInstance extends InstanceBase {
 			},
 			{
 				type: 'checkbox',
-				id: 'reconnect',
-				label: 'Reconnect',
-				tooltip: 'Reconnect on WebSocket error (after 5 secs)',
-				width: 6,
-				default: true,
-			},
-			{
-				type: 'checkbox',
-				id: 'append_new_line',
-				label: 'Append new line',
-				tooltip: 'Append new line (\\r\\n) to commands',
-				width: 6,
-				default: true,
-			},
-			{
-				type: 'checkbox',
 				id: 'debug_messages',
 				label: 'Debug messages',
 				tooltip: 'Log incomming and outcomming messages',
 				width: 6,
-			},
-			{
-				type: 'checkbox',
-				id: 'reset_variables',
-				label: 'Reset variables',
-				tooltip: 'Reset variables on init and on connect',
-				width: 6,
-				default: true,
 			},
 		]
 	}
