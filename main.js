@@ -18,6 +18,7 @@ class ModuleInstance extends InstanceBase {
 		this.config = config
 
 		this.initWebSocket()
+		this.isInitialized = true
 		this.updateStatus(InstanceStatus.Ok)
 
 		this.updateActions() // export actions
@@ -28,6 +29,15 @@ class ModuleInstance extends InstanceBase {
 	// When module gets deleted
 	async destroy() {
 		this.log('debug', 'destroy')
+		this.isInitialized = false
+		if (this.reconnect_timer) {
+			clearTimeout(this.reconnect_timer)
+			this.reconnect_timer = null
+		}
+		if (this.ws) {
+			this.ws.close(1000)
+			delete this.ws
+		}
 	}
 
 	async configUpdated(config) {
@@ -35,10 +45,22 @@ class ModuleInstance extends InstanceBase {
 	}
 
 	reconnect() {
-		this.initWebSocket()
+		if (this.isInitialized) {
+			if (this.reconnect_timer) {
+				clearTimeout(this.reconnect_timer)
+			}
+			this.reconnect_timer = setTimeout(() => {
+				this.initWebSocket()
+			}, 5000)
+		}
 	}
 
 	initWebSocket() {
+		if (this.reconnect_timer) {
+			clearTimeout(this.reconnect_timer)
+			this.reconnect_timer = null
+		}
+
 		const url = `${this.config.url}/${this.config.stream}?topic=feedback,command,${this.config.topic.join(',')}`
 		if (!url || url.match(new RegExp(this.wsRegex)) === null) {
 			this.updateStatus(InstanceStatus.BadConfig, `WS URL is not defined or invalid`)
@@ -62,7 +84,7 @@ class ModuleInstance extends InstanceBase {
 		this.ws.on('close', (code) => {
 			this.log('debug', `Connection closed with code ${code}`)
 			this.updateStatus(InstanceStatus.Disconnected, `Connection closed with code ${code}`)
-			setTimeout(this.reconnect(), 5000)
+			this.reconnect()
 			this.log('debug', `Attempt reconnect in 500ms`)
 			this.updateStatus(InstanceStatus.Disconnected, `Attempt reconnect in 500ms`)
 		})
