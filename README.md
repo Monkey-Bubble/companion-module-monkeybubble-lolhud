@@ -22,4 +22,9 @@ This module gives you control over the in-game overlay and statistics slides of 
 
 ## Usage
 
+Make sure your Monkey Bubble LoL HUD Server is running before starting the module.
+Enter the websocket url and select a stream number in the module settings. You can ignore the topics for now. Press save to start the module.
+
+There are a few presets you can look through to help you get started.
+
 For more information see [HELP.md](./companion/HELP.md) and [LICENSE](./LICENSE)
