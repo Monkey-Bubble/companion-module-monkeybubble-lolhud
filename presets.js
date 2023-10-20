@@ -16,7 +16,7 @@ module.exports = async function (self) {
 				{
 					down: [
 						{
-							action: 'totalgold_toggle',
+							actionId: 'totalgold_toggle',
 							options: {
 								action: 'toggle',
 							},
@@ -27,8 +27,12 @@ module.exports = async function (self) {
 			],
 			feedbacks: [
 				{
-					type: 'totalgold_state',
+					feedbackId: 'totalgold_state',
 					options: {},
+					style: {
+						bgcolor: combineRgb(255, 0, 0),
+						color: combineRgb(255, 255, 255),
+					},
 				},
 			],
 		},
@@ -46,7 +50,7 @@ module.exports = async function (self) {
 				{
 					down: [
 						{
-							action: 'goldDif_toggle',
+							actionId: 'goldDif_toggle',
 							options: {
 								action: 'toggle',
 							},
@@ -57,8 +61,12 @@ module.exports = async function (self) {
 			],
 			feedbacks: [
 				{
-					type: 'goldDif_state',
+					feedbackId: 'goldDif_state',
 					options: {},
+					style: {
+						bgcolor: combineRgb(255, 0, 0),
+						color: combineRgb(255, 255, 255),
+					},
 				},
 			],
 		},
@@ -76,7 +84,7 @@ module.exports = async function (self) {
 				{
 					down: [
 						{
-							action: 'tab_obs1_toggle',
+							actionId: 'tab_obs1_toggle',
 							options: {
 								action: 'toggle',
 							},
@@ -87,8 +95,12 @@ module.exports = async function (self) {
 			],
 			feedbacks: [
 				{
-					type: 'tab_obs1_state',
+					feedbackId: 'tab_obs1_state',
 					options: {},
+					style: {
+						bgcolor: combineRgb(255, 0, 0),
+						color: combineRgb(255, 255, 255),
+					},
 				},
 			],
 		},
@@ -106,7 +118,7 @@ module.exports = async function (self) {
 				{
 					down: [
 						{
-							action: 'tab_obs2_toggle',
+							actionId: 'tab_obs2_toggle',
 							options: {
 								action: 'toggle',
 							},
@@ -117,8 +129,12 @@ module.exports = async function (self) {
 			],
 			feedbacks: [
 				{
-					type: 'tab_obs2_state',
+					feedbackId: 'tab_obs2_state',
 					options: {},
+					style: {
+						bgcolor: combineRgb(255, 0, 0),
+						color: combineRgb(255, 255, 255),
+					},
 				},
 			],
 		},
@@ -136,7 +152,7 @@ module.exports = async function (self) {
 				{
 					down: [
 						{
-							action: 'baron_toggle',
+							actionId: 'baron_toggle',
 							options: {
 								action: 'toggle',
 							},
@@ -147,8 +163,12 @@ module.exports = async function (self) {
 			],
 			feedbacks: [
 				{
-					type: 'baron_state',
+					feedbackId: 'baron_state',
 					options: {},
+					style: {
+						bgcolor: combineRgb(255, 0, 0),
+						color: combineRgb(255, 255, 255),
+					},
 				},
 			],
 		},
@@ -166,7 +186,7 @@ module.exports = async function (self) {
 				{
 					down: [
 						{
-							action: 'xpLevel_toggle',
+							actionId: 'xplevel_toggle',
 							options: {
 								action: 'toggle',
 							},
@@ -177,8 +197,12 @@ module.exports = async function (self) {
 			],
 			feedbacks: [
 				{
-					type: 'xpLevel_state',
+					feedbackId: 'xpLevel_state',
 					options: {},
+					style: {
+						bgcolor: combineRgb(255, 0, 0),
+						color: combineRgb(255, 255, 255),
+					},
 				},
 			],
 		},
@@ -196,7 +220,7 @@ module.exports = async function (self) {
 				{
 					down: [
 						{
-							action: 'tfdamage_toggle',
+							actionId: 'tfdamage_toggle',
 							options: {
 								action: 'toggle',
 							},
@@ -207,8 +231,12 @@ module.exports = async function (self) {
 			],
 			feedbacks: [
 				{
-					type: 'tfdamage_state',
+					feedbackId: 'tfdamage_state',
 					options: {},
+					style: {
+						bgcolor: combineRgb(255, 0, 0),
+						color: combineRgb(255, 255, 255),
+					},
 				},
 			],
 		},
@@ -226,7 +254,7 @@ module.exports = async function (self) {
 				{
 					down: [
 						{
-							action: 'totalgold_toggle',
+							actionId: 'totalgold_toggle',
 							options: {
 								action: 'on',
 							},
@@ -251,7 +279,7 @@ module.exports = async function (self) {
 				{
 					down: [
 						{
-							action: 'goldDif_toggle',
+							actionId: 'goldDif_toggle',
 							options: {
 								action: 'on',
 							},
@@ -276,7 +304,7 @@ module.exports = async function (self) {
 				{
 					down: [
 						{
-							action: 'tab_obs1_toggle',
+							actionId: 'tab_obs1_toggle',
 							options: {
 								action: 'on',
 							},
@@ -301,7 +329,7 @@ module.exports = async function (self) {
 				{
 					down: [
 						{
-							action: 'tab_obs2_toggle',
+							actionId: 'tab_obs2_toggle',
 							options: {
 								action: 'on',
 							},
@@ -326,7 +354,7 @@ module.exports = async function (self) {
 				{
 					down: [
 						{
-							action: 'baron_toggle',
+							actionId: 'baron_toggle',
 							options: {
 								action: 'on',
 							},
@@ -351,7 +379,7 @@ module.exports = async function (self) {
 				{
 					down: [
 						{
-							action: 'xpLevel_toggle',
+							actionId: 'xpLevel_toggle',
 							options: {
 								action: 'on',
 							},
@@ -376,7 +404,7 @@ module.exports = async function (self) {
 				{
 					down: [
 						{
-							action: 'tfdamage_toggle',
+							actionId: 'tfdamage_toggle',
 							options: {
 								action: 'on',
 							},
@@ -401,7 +429,7 @@ module.exports = async function (self) {
 				{
 					down: [
 						{
-							action: 'totalgold_toggle',
+							actionId: 'totalgold_toggle',
 							options: {
 								action: 'off',
 							},
@@ -426,7 +454,7 @@ module.exports = async function (self) {
 				{
 					down: [
 						{
-							action: 'goldDif_toggle',
+							actionId: 'goldDif_toggle',
 							options: {
 								action: 'off',
 							},
@@ -451,7 +479,7 @@ module.exports = async function (self) {
 				{
 					down: [
 						{
-							action: 'tab_obs1_toggle',
+							actionId: 'tab_obs1_toggle',
 							options: {
 								action: 'off',
 							},
@@ -476,7 +504,7 @@ module.exports = async function (self) {
 				{
 					down: [
 						{
-							action: 'tab_obs2_toggle',
+							actionId: 'tab_obs2_toggle',
 							options: {
 								action: 'off',
 							},
@@ -501,7 +529,7 @@ module.exports = async function (self) {
 				{
 					down: [
 						{
-							action: 'baron_toggle',
+							actionId: 'baron_toggle',
 							options: {
 								action: 'off',
 							},
@@ -526,7 +554,7 @@ module.exports = async function (self) {
 				{
 					down: [
 						{
-							action: 'xpLevel_toggle',
+							actionId: 'xpLevel_toggle',
 							options: {
 								action: 'off',
 							},
@@ -551,7 +579,7 @@ module.exports = async function (self) {
 				{
 					down: [
 						{
-							action: 'tfdamage_toggle',
+							actionId: 'tfdamage_toggle',
 							options: {
 								action: 'off',
 							},
