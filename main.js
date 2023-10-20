@@ -83,10 +83,9 @@ class ModuleInstance extends InstanceBase {
 		})
 		this.ws.on('close', (code) => {
 			this.log('debug', `Connection closed with code ${code}`)
-			this.updateStatus(InstanceStatus.Disconnected, `Connection closed with code ${code}`)
+			this.updateStatus(InstanceStatus.Disconnected, `Connection closed with code ${code}. Attempt reconnect in 500ms.`)
 			this.reconnect()
 			this.log('debug', `Attempt reconnect in 500ms`)
-			this.updateStatus(InstanceStatus.Disconnected, `Attempt reconnect in 500ms`)
 		})
 
 		this.ws.on('message', this.messageReceivedFromWebSocket.bind(this))
