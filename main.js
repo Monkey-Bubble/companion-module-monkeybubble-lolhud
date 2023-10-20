@@ -4,6 +4,7 @@ const UpgradeScripts = require('./upgrades')
 const UpdateActions = require('./actions')
 const UpdateFeedbacks = require('./feedbacks')
 const UpdateVariableDefinitions = require('./variables')
+const UpdatePresets = require('./presets')
 
 class ModuleInstance extends InstanceBase {
 	constructor(internal) {
@@ -22,6 +23,7 @@ class ModuleInstance extends InstanceBase {
 		this.updateActions() // export actions
 		this.updateFeedbacks() // export feedbacks
 		this.updateVariableDefinitions() // export variable definitions
+		this.updatePresets() // export presets
 	}
 	// When module gets deleted
 	async destroy() {
@@ -143,6 +145,10 @@ class ModuleInstance extends InstanceBase {
 
 	updateVariableDefinitions() {
 		UpdateVariableDefinitions(this)
+	}
+
+	updatePresets() {
+		UpdatePresets(this)
 	}
 }
 
