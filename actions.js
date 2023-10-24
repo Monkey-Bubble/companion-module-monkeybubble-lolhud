@@ -181,5 +181,26 @@ module.exports = function (self) {
 					self.ws.send(JSON.stringify({ topic: 'command', payload: { tfdamage: false } }))
 			},
 		},
+		tfdamage_datapoint: {
+			name: 'Set Start / End Point for Damage Dealth Last Teamfight',
+			options: [
+				{
+					id: 'action',
+					type: 'dropdown',
+					label: 'Action',
+					choices: [
+						{ id: 'start', label: 'Start Point' },
+						{ id: 'end', label: 'End Point' },
+					],
+					default: 'start',
+				},
+			],
+			callback: async (event) => {
+				if (event.options.action === 'start')
+					self.ws.send(JSON.stringify({ topic: 'command', payload: { damage_start: Date.now() } }))
+				if (event.options.action === 'end')
+					self.ws.send(JSON.stringify({ topic: 'command', payload: { damage_end: Date.now() } }))
+			},
+		},
 	})
 }
